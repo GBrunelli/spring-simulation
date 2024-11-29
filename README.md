@@ -1,5 +1,3 @@
-
-
 ## Simulação Sistema Massa Mola
 
 ### Objetivo e Tipo de Projeto:
@@ -70,7 +68,3 @@ Este projeto foi desenvolvido por:
 - **Alexandre Brito Gomes**: alexandre.brito@usp.br
 
 Como parte do processo avaliativo da disciplina **7600105 - Física Básica I (2024)** da **USP-São Carlos**, ministrada pela(o) **Prof. Krissia de Zawadzki/Esmerindo de Sousa Bernardes**.
-
----
-
-Esse README segue o formato e as diretrizes que você pediu, oferecendo uma explicação clara do projeto, sua implementação e instruções de uso. Se precisar de mais detalhes ou ajustes, posso ajudar!
