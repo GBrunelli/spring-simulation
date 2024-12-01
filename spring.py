@@ -45,7 +45,7 @@ x = x0 / PIXELS_PER_METER
 v = v0 / PIXELS_PER_METER
 
 # Posição de equilíbrio (lado esquerdo da tela)
-EQUILIBRIUM_X = 50  # Posição fixa do início da mola
+EQUILIBRIUM_X = 250  # Posição fixa do início da mola
 
 EQUILIBRIUM_OFFSET = 2
 
@@ -63,20 +63,15 @@ show_spring_force_vector = False
 show_damping_force_vector = False
 show_net_force_vector = False
 
+# Coeficiente de restituição (elasticidade)
+e = 0.8  # Valor entre 0 e 1 para controlar a elasticidade
+
+# Limite de colisão
+collision_threshold = 0.02  # Distância mínima da parede em metros
+
 # Classe para criar caixas de entrada
 class InputBox:
     def __init__(self, x, y, w, h, text='', label=''):
-        """
-        Inicializa a caixa de entrada para modificar parâmetros de simulação.
-
-        Parâmetros:
-        - x (int): Posição horizontal da caixa de entrada.
-        - y (int): Posição vertical da caixa de entrada.
-        - w (int): Largura da caixa de entrada.
-        - h (int): Altura da caixa de entrada.
-        - text (str): Texto inicial na caixa de entrada.
-        - label (str): Rótulo associado à caixa de entrada.
-        """
         self.rect = pygame.Rect(x, y, w, h)
         self.color = GRAY
         self.text = text
@@ -86,12 +81,6 @@ class InputBox:
         self.label_surface = font.render(label, True, BLACK)
 
     def handle_event(self, event):
-        """
-        Trata os eventos de interação com a caixa de entrada.
-
-        Parâmetros:
-        - event (pygame.event.Event): Evento gerado pela interação do usuário.
-        """
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
                 self.active = True
@@ -110,11 +99,6 @@ class InputBox:
             self.txt_surface = font.render(self.text, True, BLACK)
 
     def update_parameter(self):
-        """
-        Atualiza o valor do parâmetro com base no texto da caixa de entrada.
-
-        A atualização considera os parâmetros de massa, constante da mola e amortecimento.
-        """
         global m, k, b
         try:
             value = float(self.text)
@@ -128,12 +112,6 @@ class InputBox:
             pass
 
     def draw(self, screen):
-        """
-        Desenha a caixa de entrada na tela.
-
-        Parâmetros:
-        - screen (pygame.Surface): Superfície onde a caixa de entrada será desenhada.
-        """
         screen.blit(self.label_surface, (self.rect.x - self.label_surface.get_width() - 10, self.rect.y + 5))
         screen.blit(self.txt_surface, (self.rect.x + 5, self.rect.y + 5))
         pygame.draw.rect(screen, self.color, self.rect, 2)
@@ -141,49 +119,22 @@ class InputBox:
 # Classe para criar um botão de toggle
 class ToggleButton:
     def __init__(self, x, y, w, h, text='', variable_name=''):
-        """
-        Inicializa o botão de toggle.
-
-        Parâmetros:
-        - x (int): Posição horizontal do botão.
-        - y (int): Posição vertical do botão.
-        - w (int): Largura do botão.
-        - h (int): Altura do botão.
-        - text (str): Texto do botão.
-        - variable_name (str): Nome da variável global a ser alternada.
-        """
         self.rect = pygame.Rect(x, y, w, h)
         self.text = text
         self.variable_name = variable_name
         self.txt_surface = font.render(text, True, BLACK)
 
     def handle_event(self, event):
-        """
-        Trata os eventos de interação com o botão.
-
-        Parâmetros:
-        - event (pygame.event.Event): Evento gerado pela interação do usuário.
-        """
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
-                # Alternar a variável correspondente
                 current_value = globals()[self.variable_name]
                 globals()[self.variable_name] = not current_value
 
     def draw(self, screen):
-        """
-        Desenha o botão na tela.
-
-        Parâmetros:
-        - screen (pygame.Surface): Superfície onde o botão será desenhado.
-        """
-        # Obter o valor atual da variável
         current_value = globals()[self.variable_name]
-        # Mudar a cor do botão com base no estado
         button_color = LIGHT_GREEN if current_value else GRAY
         pygame.draw.rect(screen, button_color, self.rect)
         pygame.draw.rect(screen, BLACK, self.rect, 2)
-        # Centralizar o texto
         text_rect = self.txt_surface.get_rect(center=self.rect.center)
         screen.blit(self.txt_surface, text_rect)
 
@@ -204,18 +155,6 @@ toggle_buttons = [
 ]
 
 def draw_spring(screen, start_pos, end_pos, color, num_coils=20, coil_radius=10, width=2):
-    """
-    Desenha uma mola entre dois pontos dados.
-
-    Parâmetros:
-    - screen (pygame.Surface): Superfície onde a mola será desenhada.
-    - start_pos (tuple): Posição de início da mola (x, y).
-    - end_pos (tuple): Posição de fim da mola (x, y).
-    - color (tuple): Cor da mola.
-    - num_coils (int): Número de espirais da mola.
-    - coil_radius (int): Raio das espirais da mola.
-    - width (int): Largura da linha da mola.
-    """
     x1, y1 = start_pos
     x2, y2 = end_pos
     dx = x2 - x1
@@ -236,18 +175,7 @@ def draw_spring(screen, start_pos, end_pos, color, num_coils=20, coil_radius=10,
         pygame.draw.lines(screen, color, False, points, width)
 
 def draw_vector(screen, start_pos, end_pos, color=(0, 0, 255), width=3):
-    """
-    Desenha um vetor como uma linha com uma ponta de flecha.
-
-    Parâmetros:
-    - screen (pygame.Surface): Superfície onde o vetor será desenhado.
-    - start_pos (tuple): Posição inicial do vetor.
-    - end_pos (tuple): Posição final do vetor.
-    - color (tuple): Cor do vetor.
-    - width (int): Largura da linha do vetor.
-    """
     pygame.draw.line(screen, color, start_pos, end_pos, width)
-    # Desenhar a ponta da flecha
     angle = math.atan2(end_pos[1] - start_pos[1], end_pos[0] - start_pos[0])
     arrow_length = 10
     arrow_width = 5
@@ -260,6 +188,8 @@ def draw_vector(screen, start_pos, end_pos, color=(0, 0, 255), width=3):
 # Loop principal da simulação
 running = True
 while running:
+    screen.fill(WHITE)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -289,9 +219,19 @@ while running:
         a = net_force / m
         v += a * dt
         x += v * dt
-        x = max(0, x)
 
-    screen.fill(WHITE)
+        # Tratamento de colisão suave com a parede
+        if x < collision_threshold:
+            x = collision_threshold  # Reposicionar a massa para evitar atravessar a parede
+            v = -v * e  # Inverter a velocidade com coeficiente de restituição
+
+    # Desenhar a parede no lado esquerdo
+    max_wall_height = HEIGHT//2 - 100
+    min_wall_height = HEIGHT//2 + 100
+    pygame.draw.line(screen, BLACK, (EQUILIBRIUM_X - 20, max_wall_height - 10), (EQUILIBRIUM_X - 20, min_wall_height), 4)
+    for i in range(max_wall_height, min_wall_height, 20):
+        pygame.draw.line(screen, BLACK, (EQUILIBRIUM_X - 20, i), (EQUILIBRIUM_X - 40, i + 10), 2)
+  
     for box in input_boxes:
         box.draw(screen)
     for button in toggle_buttons:
