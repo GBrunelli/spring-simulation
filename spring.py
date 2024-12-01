@@ -156,6 +156,7 @@ toggle_buttons = [
 
 def draw_spring(screen, start_pos, end_pos, color, num_coils=20, coil_radius=10, width=2):
     x1, y1 = start_pos
+    x1 = x1 - 20
     x2, y2 = end_pos
     dx = x2 - x1
     dy = y2 - y1
