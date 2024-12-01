@@ -253,8 +253,7 @@ while running:
         start_pos = (EQUILIBRIUM_X + EQUILIBRIUM_OFFSET, reference_y - 30)
         end_pos = (mass_x, reference_y - 30)
         draw_vector(screen, start_pos, end_pos, color=BLUE, width=3)
-        displacement = x - EQUILIBRIUM_OFFSET
-        displacement_text = f"Deslocamento: {displacement:.2f} m"
+        displacement_text = f"Deslocamento: {x:.2f} m"
         displacement_surface = font.render(displacement_text, True, BLUE)
         screen.blit(displacement_surface, (20, 50))
 
@@ -265,7 +264,7 @@ while running:
         start_pos = (mass_x, reference_y)
         end_pos = (mass_x + velocity_pixels, reference_y)
         draw_vector(screen, start_pos, end_pos, color=GREEN, width=3)
-        velocity_text = f"Velocidade: {v:.2f} m/s"
+        velocity_text = f"Velocidade: {abs(v):.2f} m/s"
         velocity_surface = font.render(velocity_text, True, GREEN)
         screen.blit(velocity_surface, (20, 80))
 
@@ -276,7 +275,7 @@ while running:
         start_pos = (mass_x, reference_y + 30)
         end_pos = (mass_x + acceleration_pixels, reference_y + 30)
         draw_vector(screen, start_pos, end_pos, color=ORANGE, width=3)
-        acceleration_text = f"Aceleração: {a:.2f} m/s²"
+        acceleration_text = f"Aceleração: {abs(a):.2f} m/s²"
         acceleration_surface = font.render(acceleration_text, True, ORANGE)
         screen.blit(acceleration_surface, (20, 110))
 
@@ -287,7 +286,7 @@ while running:
         start_pos = (mass_x, reference_y + 60)
         end_pos = (mass_x + spring_force_pixels, reference_y + 60)
         draw_vector(screen, start_pos, end_pos, color=PURPLE, width=3)
-        spring_force_text = f"Força da Mola: {spring_force:.2f} N"
+        spring_force_text = f"Força da Mola: {abs(spring_force):.2f} N"
         spring_force_surface = font.render(spring_force_text, True, PURPLE)
         screen.blit(spring_force_surface, (20, 140))
 
@@ -298,7 +297,7 @@ while running:
         start_pos = (mass_x, reference_y + 90)
         end_pos = (mass_x + damping_force_pixels, reference_y + 90)
         draw_vector(screen, start_pos, end_pos, color=CYAN, width=3)
-        damping_force_text = f"Força de Amort.: {damping_force:.2f} N"
+        damping_force_text = f"Força de Amort.: {abs(damping_force):.2f} N"
         damping_force_surface = font.render(damping_force_text, True, CYAN)
         screen.blit(damping_force_surface, (20, 170))
 
@@ -309,7 +308,7 @@ while running:
         start_pos = (mass_x, reference_y + 120)
         end_pos = (mass_x + net_force_pixels, reference_y + 120)
         draw_vector(screen, start_pos, end_pos, color=BROWN, width=3)
-        net_force_text = f"Força Resultante: {net_force:.2f} N"
+        net_force_text = f"Força Resultante: {abs(net_force):.2f} N"
         net_force_surface = font.render(net_force_text, True, BROWN)
         screen.blit(net_force_surface, (20, 200))
 
