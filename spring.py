@@ -1,6 +1,12 @@
 import pygame
 import sys
 import math
+import matplotlib.pyplot as plt
+import matplotlib
+import threading
+
+# Configurar o backend do Matplotlib para ser interativo
+matplotlib.use("TkAgg")
 
 # Inicialização do Pygame
 pygame.init()
@@ -68,6 +74,62 @@ e = 0.8  # Valor entre 0 e 1 para controlar a elasticidade
 
 # Limite de colisão
 collision_threshold = 0.02  # Distância mínima da parede em metros
+
+# Variáveis para gravação de dados e controle
+graph_create = False
+time_data = []
+position_data = []
+velocity_data = []
+acceleration_data = []
+collecting_data = False
+
+# Variável para controle da thread
+graph_thread = None
+
+# Função que controla a coleta de dados
+def handle_graph_toggle():
+    global collecting_data, graph_thread
+    if graph_create and not collecting_data:
+        # Começa a gravar dados
+        collecting_data = True
+        time_data.clear()
+        position_data.clear()
+        velocity_data.clear()
+        acceleration_data.clear()
+    elif not graph_create and collecting_data:
+        # Para de gravar e gera o gráfico em uma thread separada
+        collecting_data = False
+        if graph_thread and graph_thread.is_alive():
+            print("Aguardando o encerramento da thread anterior...")
+            graph_thread.join()  # Aguarda thread anterior finalizar (evita memory leak)
+        graph_thread = threading.Thread(target=generate_graph, daemon=True)
+        graph_thread.start()
+
+def generate_graph():
+    if not time_data:
+        print("Nenhum dado para gerar o gráfico.")
+        return
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(time_data, position_data, label="Posição (m)", color="blue")
+    plt.plot(time_data, velocity_data, label="Velocidade (m/s)", color="green")
+    plt.plot(time_data, acceleration_data, label="Aceleração (m/s²)", color="orange")
+    plt.xlabel("Tempo (s)")
+    plt.ylabel("Valores")
+    plt.title("Gráfico de Posição, Velocidade e Aceleração")
+    plt.legend()
+    plt.grid()
+    plt.tight_layout()
+
+    # Função para garantir encerramento ao fechar o gráfico
+    def on_close(event):
+        print("Fechando gráfico e encerrando thread...")
+        plt.close("all")
+
+    # Conectar evento de fechamento da janela
+    plt.gcf().canvas.mpl_connect("close_event", on_close)
+
+    plt.show()
 
 # Classe para criar caixas de entrada
 class InputBox:
@@ -152,6 +214,7 @@ toggle_buttons = [
     ToggleButton(WIDTH - 180, 370, 140, 32, text='Força da Mola', variable_name='show_spring_force_vector'),
     ToggleButton(WIDTH - 180, 410, 140, 32, text='Força de Amort.', variable_name='show_damping_force_vector'),
     ToggleButton(WIDTH - 180, 450, 140, 32, text='Força Resultante', variable_name='show_net_force_vector'),
+    ToggleButton(WIDTH - 180, 490, 140, 32, text='Gerar Gráfico', variable_name='graph_create'),
 ]
 
 def draw_spring(screen, start_pos, end_pos, color, num_coils=20, coil_radius=10, width=2):
@@ -311,6 +374,16 @@ while running:
         net_force_text = f"Força Resultante: {abs(net_force):.2f} N"
         net_force_surface = font.render(net_force_text, True, BROWN)
         screen.blit(net_force_surface, (20, 200))
+
+    #Caso a coleta esteja ligada, salva os dados para plotar
+    if collecting_data:
+        time_data.append(pygame.time.get_ticks() / 1000.0)  # Tempo em segundos
+        position_data.append(x)
+        velocity_data.append(v)
+        acceleration_data.append(a)
+    
+    #Controla quando os dados são coletados e quando o plot é feito
+    handle_graph_toggle()
 
     pygame.display.flip()
     clock.tick(60)
