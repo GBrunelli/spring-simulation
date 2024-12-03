@@ -196,3 +196,11 @@ Esta simulação tem diversas aplicações práticas:
 ### Conclusão
 
 O projeto de simulação interativa de sistemas massa-mola proporciona uma ferramenta poderosa para visualizar e compreender o movimento oscilatório amortecido. Sua interface intuitiva e a possibilidade de ajustar parâmetros em tempo real tornam a experiência didática e envolvente, beneficiando estudantes e profissionais de diversas áreas.
+
+### Referências
+
+[Notas de Aula Professor Esmerindo - IFCS](https://edisciplinas.usp.br/pluginfile.php/8442805/mod_folder/content/0/Notas%20de%20aulas/dinamica-v4.pdf?forcedownload=1)
+
+[Slides Professor Antônio Roque - FFCLRP](https://edisciplinas.usp.br/pluginfile.php/5190811/mod_resource/content/1/aula5.pdf)
+
+[Wikipedia - Oscilador Harmônico](https://pt.wikipedia.org/wiki/Oscilador_harm%C3%B4nico)
