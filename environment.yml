@@ -18,5 +18,6 @@ dependencies:
   - tzdata
   - xz
   - zlib
+  - tk
   - pip:
       - pygame==2.6.1
