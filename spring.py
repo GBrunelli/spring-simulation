@@ -249,6 +249,10 @@ def draw_vector(screen, start_pos, end_pos, color=(0, 0, 255), width=3):
 # Loop principal da simulação
 running = True
 start_time = pygame.time.get_ticks() / 1000.0  # Tempo inicial em segundos
+spring_force = -k * (x - EQUILIBRIUM_OFFSET)
+damping_force = -b * v
+net_force = spring_force + damping_force
+a = net_force / m
 while running:
     screen.fill(WHITE)
 
@@ -275,12 +279,20 @@ while running:
             x = max(0, (mouse_x - EQUILIBRIUM_X) / PIXELS_PER_METER)
 
     if not dragging:
+        # Atualizar posição usando Verlet de velocidade
+        x += v * dt + 0.5 * a * dt * dt
+
+        # Cálculo da nova aceleração
         spring_force = -k * (x - EQUILIBRIUM_OFFSET)
         damping_force = -b * v
         net_force = spring_force + damping_force
-        a = net_force / m
-        v += a * dt
-        x += v * dt
+        a_new = net_force / m
+
+        # Atualizar velocidade
+        v += 0.5 * (a + a_new) * dt
+
+        # Preparar para a próxima iteração
+        a = a_new
 
         # Tratamento de colisão suave com a parede
         if x < collision_threshold:
