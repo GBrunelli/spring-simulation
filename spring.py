@@ -3,16 +3,16 @@ import sys
 import math
 import matplotlib.pyplot as plt
 import matplotlib
-import threading
 
-# Configurar o backend do Matplotlib para ser interativo
+# Configurar o backend do Matplotlib para evitar conflitos com Pygame
 matplotlib.use("TkAgg")
+#matplotlib.use("MacOSX") #caso queira rodar em Mac, comente a linha de cima e descomente essa
 
 # Inicialização do Pygame
 pygame.init()
 
 # Dimensões da tela
-WIDTH, HEIGHT = 1600, 1200
+WIDTH, HEIGHT = 1500, 800
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Simulação de Sistema Massa-Mola")
 
@@ -83,12 +83,13 @@ velocity_data = []
 acceleration_data = []
 collecting_data = False
 
-# Variável para controle da thread
-graph_thread = None
+# Variável para controle do gráfico
+generate_graph_flag = False  # Modificação aqui
+plot_open = False  # Adicionado para controlar se o plot está aberto
 
 # Função que controla a coleta de dados
 def handle_graph_toggle():
-    global collecting_data, graph_thread
+    global collecting_data, generate_graph_flag
     if graph_create and not collecting_data:
         # Começa a gravar dados
         collecting_data = True
@@ -97,15 +98,12 @@ def handle_graph_toggle():
         velocity_data.clear()
         acceleration_data.clear()
     elif not graph_create and collecting_data:
-        # Para de gravar e gera o gráfico em uma thread separada
+        # Para de gravar e sinaliza para gerar o gráfico
         collecting_data = False
-        if graph_thread and graph_thread.is_alive():
-            print("Aguardando o encerramento da thread anterior...")
-            graph_thread.join()  # Aguarda thread anterior finalizar (evita memory leak)
-        graph_thread = threading.Thread(target=generate_graph, daemon=True)
-        graph_thread.start()
+        generate_graph_flag = True  # Modificação aqui
 
 def generate_graph():
+    global plot_open
     if not time_data:
         print("Nenhum dado para gerar o gráfico.")
         return
@@ -121,15 +119,14 @@ def generate_graph():
     plt.grid()
     plt.tight_layout()
 
-    # Função para garantir encerramento ao fechar o gráfico
     def on_close(event):
-        print("Fechando gráfico e encerrando thread...")
-        plt.close("all")
+        global plot_open
+        plot_open = False
 
-    # Conectar evento de fechamento da janela
-    plt.gcf().canvas.mpl_connect("close_event", on_close)
+    plt.gcf().canvas.mpl_connect('close_event', on_close)
 
-    plt.show()
+    plt.show(block=False)
+    plot_open = True
 
 # Classe para criar caixas de entrada
 class InputBox:
@@ -251,6 +248,7 @@ def draw_vector(screen, start_pos, end_pos, color=(0, 0, 255), width=3):
 
 # Loop principal da simulação
 running = True
+start_time = pygame.time.get_ticks() / 1000.0  # Tempo inicial em segundos
 while running:
     screen.fill(WHITE)
 
@@ -375,15 +373,25 @@ while running:
         net_force_surface = font.render(net_force_text, True, BROWN)
         screen.blit(net_force_surface, (20, 200))
 
-    #Caso a coleta esteja ligada, salva os dados para plotar
+    # Caso a coleta esteja ligada, salva os dados para plotar
     if collecting_data:
-        time_data.append(pygame.time.get_ticks() / 1000.0)  # Tempo em segundos
+        current_time = pygame.time.get_ticks() / 1000.0 - start_time  # Tempo em segundos desde o início da simulação
+        time_data.append(current_time)
         position_data.append(x)
         velocity_data.append(v)
         acceleration_data.append(a)
     
-    #Controla quando os dados são coletados e quando o plot é feito
+    # Controla quando os dados são coletados e quando o plot é feito
     handle_graph_toggle()
+
+    # Checa se é hora de gerar o gráfico
+    if generate_graph_flag:
+        generate_graph()
+        generate_graph_flag = False
+
+    # Se o gráfico está aberto, atualiza a interface do matplotlib
+    if plot_open:
+        plt.pause(0.001)
 
     pygame.display.flip()
     clock.tick(60)
