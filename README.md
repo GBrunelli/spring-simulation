@@ -12,7 +12,16 @@ Com essas interações, o usuário observa como as variáveis físicas influenci
 
 ![Imagem do sistema massa-mola](images/spring_system.gif)
 
-Este projeto implementa a solução para a simulação de um sistema massa-mola-amortecedor utilizando o **método de Euler explícito**. A abordagem consiste em calcular iterativamente as grandezas dinâmicas do sistema (força, aceleração, velocidade e posição) ao longo do tempo. O método baseia-se na discretização temporal, calculando as atualizações para cada intervalo de tempo ($\Delta t$).
+Este projeto implementa a solução para a simulação de um sistema massa-mola-amortecedor utilizando o **Método de Verlet de Velocidade**. A abordagem consiste em calcular iterativamente as grandezas dinâmicas do sistema (força, aceleração, velocidade e posição) ao longo do tempo. O método baseia-se na discretização temporal, calculando as atualizações para cada intervalo de tempo ($\Delta t$).
+
+A cada passo de tempo:
+   - Calculamos a força da mola e a força de amortecimento.
+   - Somamos as forças para obter a força resultante.
+   - Atualizamos a posição considerando a velocidade e aceleração atuais.
+   - Recalculamos a aceleração com base na nova posição.
+   - Atualizamos a velocidade utilizando a média das acelerações (atual e nova).
+
+O uso do **Método de Verlet de Velocidade** proporciona maior precisão e estabilidade em relação ao método de Euler, sendo especialmente adequado para sistemas oscilatórios como o massa-mola-amortecedor.
 
 A cada passo de tempo:
    - Calculamos a força da mola e a força de amortecimento.
@@ -211,3 +220,5 @@ O projeto de simulação interativa de sistemas massa-mola proporciona uma ferra
 [Slides Professor Antônio Roque - FFCLRP](https://edisciplinas.usp.br/pluginfile.php/5190811/mod_resource/content/1/aula5.pdf)
 
 [Wikipedia - Oscilador Harmônico](https://pt.wikipedia.org/wiki/Oscilador_harm%C3%B4nico)
+
+[Wikipedia - Método de Varlet](https://pt.wikipedia.org/wiki/M%C3%A9todo_de_Verlet)
