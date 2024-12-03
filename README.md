@@ -12,6 +12,13 @@ Com essas interações, o usuário observa como as variáveis físicas influenci
 
 ![Imagem do sistema massa-mola](images/spring_system.gif)
 
+Este projeto implementa a solução para a simulação de um sistema massa-mola-amortecedor utilizando o **método de Euler explícito**. A abordagem consiste em calcular iterativamente as grandezas dinâmicas do sistema (força, aceleração, velocidade e posição) ao longo do tempo. O método baseia-se na discretização temporal, calculando as atualizações para cada intervalo de tempo ($\Delta t$).
+
+A cada passo de tempo:
+   - Calculamos a força da mola e a força de amortecimento.
+   - Somamos as forças para obter a força resultante.
+   - Atualizamos a aceleração, velocidade e posição usando o método de Euler explícito.
+
 ---
 
 ### Conceitos Físicos e Modelo Matemático
