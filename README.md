@@ -1,105 +1,198 @@
-## Simulação Sistema Massa Mola
+## Simulação de Sistema Massa-Mola Amortecido
 
-### Objetivo e Tipo de Projeto:
-Este projeto é uma **simulação** criada para **visualizar** o comportamento de um sistema massa-mola com amortecimento. O objetivo principal é simular o movimento de uma massa presa a uma mola, permitindo que o usuário interaja com a simulação ajustando parâmetros como massa, constante da mola e coeficiente de amortecimento. A simulação ajuda a compreender como esses fatores influenciam o movimento da massa ao longo do tempo.
+### Objetivo e Tipo de Projeto
 
-A simulação é **interativa** e permite ao usuário visualizar o impacto das mudanças nos parâmetros físicos diretamente no comportamento da mola e da massa.
+Este projeto consiste em uma **simulação interativa** projetada para **visualizar e compreender** o comportamento dinâmico de um sistema massa-mola com amortecimento. O principal objetivo é demonstrar o movimento de uma massa conectada a uma mola, enquanto o usuário pode interagir com a simulação ajustando parâmetros como:
+
+- **Massa** ($m$),
+- **Constante da mola** ($k$),
+- **Coeficiente de amortecimento** ($b$).
+
+Com essas interações, o usuário observa como as variáveis físicas influenciam diretamente o comportamento do sistema, incluindo o padrão de oscilações e a taxa de amortecimento. A simulação é ideal para estudantes e profissionais que buscam explorar conceitos fundamentais de física e engenharia.
 
 ![Imagem do sistema massa-mola](images/spring_system.gif)
 
-### Conceitos de Física e Modelo Matemático:
+---
 
-- **Conceito Principal:** A simulação explora o **movimento oscilatório** de um sistema massa-mola com amortecimento. A massa é puxada para a direita e, em seguida, é retardada pela força da mola e pela força de amortecimento.
+### Conceitos Físicos e Modelo Matemático
 
-- **Modelo Matemático:** O modelo matemático utilizado é baseado na **segunda lei de Newton** para sistemas dinâmicos, que pode ser expresso pela equação diferencial:
+#### Conceito Principal
 
-$$ m \cdot \ddot{x} = -k \cdot x - b \cdot \dot{x} $$
+O sistema representado neste projeto segue os princípios do **movimento oscilatório amortecido**. A massa é inicialmente deslocada e sofre a ação de duas forças principais:
 
-  Onde:
-  - \(m\) é a massa da partícula,
-  - \(k\) é a constante elástica da mola,
-  - \(b\) é o coeficiente de amortecimento,
-  - \(x\) é o deslocamento da massa em função do tempo.
+1. **Força elástica** da mola ($-k \cdot x$), que busca restaurar a massa à posição de equilíbrio,
+2. **Força de amortecimento** ($-b \cdot \dot{x}$), que reduz a energia do sistema ao longo do tempo.
 
-- **Aplicabilidade:** Esta simulação permite observar o comportamento do sistema com diferentes valores para a massa, a constante da mola e o amortecimento. É útil para estudar o efeito do amortecimento no movimento oscilatório, o que é relevante para muitas aplicações, como em sistemas mecânicos e engenharia.
+#### Modelo Matemático
 
-## Implementação
+A dinâmica do sistema é descrita pela **segunda lei de Newton** aplicada a sistemas dinâmicos:
 
-### Linguagens e Pacotes:
-O projeto foi implementado em **Python**, utilizando o pacote **PyGame** para a interface gráfica e a simulação interativa. PyGame fornece funcionalidades para desenhar a mola e a massa, e também para capturar a interação do usuário.
+$$
+m \cdot \ddot{x} = -k \cdot x - b \cdot \dot{x}
+$$
 
+Simplificando:
 
-### Como Rodar o Projeto
+$$
+\ddot{x} + \frac{b}{m} \dot{x} + \frac{k}{m} x = 0
+$$
 
-Há duas formas de executar o projeto: utilizando **Conda** (recomendado) ou diretamente com **Python** e o `pip`.
-
-#### 1. Usando Conda (Recomendado)
-
-**Passo 1: Instalar o Conda**  
-Se você ainda não tem o Conda instalado, siga o guia oficial para instalação:
-[Conda Installation Guide](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html).
-
-**Passo 2: Criar o Ambiente Conda**  
-Após instalar o Conda, crie o ambiente usando o arquivo `environment.yml`:
-
-```bash
-conda env create -f environment.yml
-```
-
-**Passo 3: Ativar o Ambiente**  
-Ative o ambiente criado:
-
-```bash
-conda activate spring
-```
-
-**Passo 4: Rodar a Simulação**  
-Execute o script da simulação:
-
-```bash
-python spring.py
-```
+Onde:
+- $m$: massa (kg),
+- $k$: constante da mola (N/m),
+- $b$: coeficiente de amortecimento (kg/s),
+- $x(t)$: deslocamento da massa em função do tempo.
 
 ---
 
-#### 2. Usando Python e `pip`
+### Solução Matemática
 
-Caso não utilize o Conda, você pode rodar o projeto diretamente com o Python. Siga os passos abaixo:
+#### Reformulação
 
-**Passo 1: Instalar o Python 3.6+**  
-Certifique-se de que uma versão compatível do Python está instalada no seu sistema. Você pode baixar o Python [aqui](https://www.python.org/downloads/).
+Definimos os seguintes parâmetros:
+- **Coeficiente de amortecimento relativo**: $\gamma = \frac{b}{2m}$,
+- **Frequência natural**: $\omega_0 = \sqrt{\frac{k}{m}}$.
 
-**Passo 2: Instalar Dependências**  
-Instale os pacotes necessários utilizando o `pip`. No terminal, execute:
+A equação diferencial torna-se:
 
-```bash
-pip install -r requirements.txt
-```
+$$
+\ddot{x} + 2\gamma \dot{x} + \omega_0^2 x = 0
+$$
 
-**Passo 3: Rodar a Simulação**  
-Agora, execute o script para iniciar a simulação:
+#### Tipos de Amortecimento
 
-```bash
-python spring.py
-```
+O comportamento do sistema depende do discriminante $\gamma^2 - \omega_0^2$:
+
+1. **Subamortecido** ($\gamma^2 < \omega_0^2$): Oscilações amortecidas.
+2. **Amortecimento crítico** ($\gamma^2 = \omega_0^2$): Retorno ao equilíbrio sem oscilações, em tempo minímo.
+3. **Superamortecido** ($\gamma^2 > \omega_0^2$): Retorno lento ao equilíbrio, sem oscilações.
+
+#### Solução Geral (Caso Subamortecido)
+
+No caso de amortecimento subcrítico, as raízes da equação característica são complexas:
+
+$$
+r = -\gamma \pm i \omega_d
+$$
+
+Onde:
+- $\omega_d = \sqrt{\omega_0^2 - \gamma^2}$: frequência angular do sistema amortecido.
+
+A solução geral é:
+
+$$
+x(t) = e^{-\gamma t} \left( C_1 \cos(\omega_d t) + C_2 \sin(\omega_d t) \right)
+$$
+
+Ou, de forma simplificada:
+
+$$
+x(t) = A e^{-\gamma t} \cos(\omega_d t + \phi)
+$$
+
+- $A$: amplitude inicial,
+- $\phi$: fase inicial,
+- $\gamma = \frac{b}{2m}$: taxa de amortecimento,
+- $\omega_d$: frequência angular do movimento amortecido.
 
 ---
 
-### Importações Necessárias:
+### Simulação Interativa
 
-O script principal (`spring.py`) depende dos seguintes módulos:
+#### Parâmetros Ajustáveis
+
+Na simulação, o usuário pode ajustar os seguintes parâmetros:
+- **Massa ($m$)**: Controla a inércia do sistema.
+- **Constante da mola ($k$)**: Determina a rigidez da mola.
+- **Coeficiente de amortecimento ($b$)**: Influencia a dissipação de energia.
+
+A simulação inicia com valores padrão:
+- Massa ($m$) = 1.0 kg,
+- Constante da mola ($k$) = 10.0 N/m,
+- Coeficiente de amortecimento ($b$) = 0.5 kg/s.
+
+#### Recursos Interativos
+
+- **Visualização em tempo real**: O comportamento da mola e da massa é exibido graficamente, incluindo oscilações e a taxa de amortecimento.
+- **Controles dinâmicos**: O usuário pode modificar os valores dos parâmetros durante a execução.
+- **Análise qualitativa**: Identifique como o amortecimento e a rigidez influenciam o tempo de retorno e a frequência do sistema.
+
+---
+
+### Implementação Técnica
+
+#### Linguagens e Pacotes
+
+A simulação é implementada em **Python**, com a biblioteca **PyGame** para criar a interface gráfica. Outros módulos necessários incluem:
 
 ```python
 import pygame
 import sys
 import math
+import matplotlib.pyplot as plt
+import matplotlib
 ```
 
-Certifique-se de que estes pacotes estão instalados para evitar problemas ao executar o código.
+#### Ambiente de Desenvolvimento
+
+O ambiente recomendado para execução é o **Conda**, garantindo compatibilidade de dependências. No entanto, é possível usar apenas o `pip` com Python.
 
 ---
 
-### Configuração Inicial:
-A simulação começa com valores padrão para os parâmetros de massa (1.0 kg), constante da mola (10.0 N/m) e coeficiente de amortecimento (0.5 kg/s). No entanto, o usuário pode ajustar esses valores dinamicamente durante a execução da simulação utilizando caixas de entrada interativas.
+### Passos para Execução
 
-Os parâmetros podem ser ajustados para diferentes experimentos, o que permite ao usuário explorar como esses parâmetros influenciam o movimento da massa.
+> ⚠️ Atenção: caso for rodar no MacOS, comente a linha 8 e descomente a linha 9
+
+#### 1. Usando Conda (Recomendado)
+
+1. **Instalar o Conda**: Siga o guia oficial de instalação do Conda [aqui](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html).
+2. **Criar o Ambiente Conda**:
+   ```bash
+   conda env create -f environment.yml
+   ```
+3. **Ativar o Ambiente**:
+   ```bash
+   conda activate spring
+   ```
+4. **Executar a Simulação**:
+   ```bash
+   python spring.py
+   ```
+
+#### 2. Usando Python e `pip`
+
+1. **Instalar o Python**: Baixe uma versão compatível de Python [aqui](https://www.python.org/downloads/).
+2. **Instalar Dependências**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. **Executar o Script**:
+   ```bash
+   python spring.py
+   ```
+
+---
+
+### Configurações Iniciais e Personalização
+
+Os valores padrão podem ser ajustados diretamente no código ou dinamicamente durante a simulação. Isso permite realizar experimentos e observar comportamentos específicos do sistema.
+
+#### Possíveis Experimentos:
+1. **Alterar o amortecimento** ($b$): Observe como oscilações são amortecidas.
+2. **Modificar a rigidez** ($k$): Explore a relação entre rigidez e frequência.
+3. **Variar a massa** ($m$): Veja como a inércia afeta o sistema.
+
+---
+
+### Aplicabilidade
+
+Esta simulação tem diversas aplicações práticas:
+- **Ensino de física**: Entender o movimento oscilatório.
+- **Engenharia**: Projetar sistemas mecânicos com amortecimento.
+- **Análise de sistemas reais**: Modelar fenômenos como suspensões de veículos ou estruturas submetidas a vibrações.
+
+---
+
+### Conclusão
+
+O projeto de simulação interativa de sistemas massa-mola proporciona uma ferramenta poderosa para visualizar e compreender o movimento oscilatório amortecido. Sua interface intuitiva e a possibilidade de ajustar parâmetros em tempo real tornam a experiência didática e envolvente, beneficiando estudantes e profissionais de diversas áreas.
