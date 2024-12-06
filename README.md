@@ -8,11 +8,11 @@ Este projeto consiste em uma **simulação interativa** projetada para **visuali
 - **Constante da mola** ($k$),
 - **Coeficiente de amortecimento** ($b$).
 
-Com essas interações, o usuário observa como as variáveis físicas influenciam diretamente o comportamento do sistema, incluindo o padrão de oscilações e a taxa de amortecimento. A simulação é ideal para estudantes e profissionais que buscam explorar conceitos fundamentais de física e engenharia.
+Com essas interações, o usuário observa como as variáveis físicas influenciam diretamente o comportamento do sistema, incluindo o padrão de oscilações e a taxa de amortecimento. A simulação tem o objetivo de ser simples e didática.
 
 ![Imagem do sistema massa-mola](images/spring_system.gif)
 
-Este projeto implementa a solução para a simulação de um sistema massa-mola-amortecedor utilizando o **Método de Verlet de Velocidade**. A abordagem consiste em calcular iterativamente as grandezas dinâmicas do sistema (força, aceleração, velocidade e posição) ao longo do tempo. O método baseia-se na discretização temporal, calculando as atualizações para cada intervalo de tempo ($\Delta t$).
+Este projeto implementa a solução para a simulação de um sistema massa-mola-amortecedor utilizando o **Método de Verlet**. A abordagem consiste em calcular iterativamente as grandezas dinâmicas do sistema (força, aceleração, velocidade e posição) ao longo do tempo. O método baseia-se na discretização temporal, calculando as atualizações para cada intervalo de tempo ($\Delta t$).
 
 A cada passo de tempo:
    - Calculamos a força da mola e a força de amortecimento.
@@ -21,7 +21,7 @@ A cada passo de tempo:
    - Recalculamos a aceleração com base na nova posição.
    - Atualizamos a velocidade utilizando a média das acelerações (atual e nova).
 
-O uso do **Método de Verlet de Velocidade** proporciona maior precisão e estabilidade em relação ao método de Euler, sendo especialmente adequado para sistemas oscilatórios como o massa-mola-amortecedor.
+O uso do **Método de Verlet** proporciona maior precisão e estabilidade em relação ao método de Euler, sendo especialmente adequado para sistemas dinâmicos como o massa-mola-amortecedor.
 
 A cada passo de tempo:
    - Calculamos a força da mola e a força de amortecimento.
@@ -42,6 +42,10 @@ O sistema representado neste projeto segue os princípios do **movimento oscilat
 #### Modelo Matemático
 
 A dinâmica do sistema é descrita pela **segunda lei de Newton** aplicada a sistemas dinâmicos: 
+
+$$
+\vec{F}\_{resultante} = \vec{F}\_{mola} + \vec{F}\_{amortecimento}
+$$
 
 $$
 m \cdot \vec{\ddot{x}} = -k \cdot \vec{x} - b \cdot \vec{\dot{x}}
