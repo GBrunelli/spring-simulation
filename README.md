@@ -8,11 +8,11 @@ Este projeto consiste em uma **simulação interativa** projetada para **visuali
 - **Constante da mola** ($k$),
 - **Coeficiente de amortecimento** ($b$).
 
-Com essas interações, o usuário observa como as variáveis físicas influenciam diretamente o comportamento do sistema, incluindo o padrão de oscilações e a taxa de amortecimento. A simulação é ideal para estudantes e profissionais que buscam explorar conceitos fundamentais de física e engenharia.
+Com essas interações, o usuário observa como as variáveis físicas influenciam diretamente o comportamento do sistema, incluindo o padrão de oscilações e a taxa de amortecimento. A simulação tem o objetivo de ser simples e didática.
 
 ![Imagem do sistema massa-mola](images/spring_system.gif)
 
-Este projeto implementa a solução para a simulação de um sistema massa-mola-amortecedor utilizando o **Método de Verlet de Velocidade**. A abordagem consiste em calcular iterativamente as grandezas dinâmicas do sistema (força, aceleração, velocidade e posição) ao longo do tempo. O método baseia-se na discretização temporal, calculando as atualizações para cada intervalo de tempo ($\Delta t$).
+Este projeto implementa a solução para a simulação de um sistema massa-mola-amortecedor utilizando o **Método de Verlet**. A abordagem consiste em calcular iterativamente as grandezas dinâmicas do sistema (força, aceleração, velocidade e posição) ao longo do tempo. O método baseia-se na discretização temporal, calculando as atualizações para cada intervalo de tempo ($\Delta t$).
 
 A cada passo de tempo:
    - Calculamos a força da mola e a força de amortecimento.
@@ -21,12 +21,12 @@ A cada passo de tempo:
    - Recalculamos a aceleração com base na nova posição.
    - Atualizamos a velocidade utilizando a média das acelerações (atual e nova).
 
-O uso do **Método de Verlet de Velocidade** proporciona maior precisão e estabilidade em relação ao método de Euler, sendo especialmente adequado para sistemas oscilatórios como o massa-mola-amortecedor.
+O uso do **Método de Verlet** proporciona maior precisão e estabilidade em relação ao método de Euler, sendo especialmente adequado para sistemas dinâmicos como o massa-mola-amortecedor.
 
 A cada passo de tempo:
    - Calculamos a força da mola e a força de amortecimento.
    - Somamos as forças para obter a força resultante.
-   - Atualizamos a aceleração, velocidade e posição usando o método de Euler explícito.
+   - Atualizamos a aceleração, velocidade e posição.
 
 ---
 
@@ -41,16 +41,20 @@ O sistema representado neste projeto segue os princípios do **movimento oscilat
 
 #### Modelo Matemático
 
-A dinâmica do sistema é descrita pela **segunda lei de Newton** aplicada a sistemas dinâmicos:
+A dinâmica do sistema é descrita pela **segunda lei de Newton** aplicada a sistemas dinâmicos: 
 
 $$
-m \cdot \ddot{x} = -k \cdot x - b \cdot \dot{x}
+\vec{F}\_{resultante} = \vec{F}\_{mola} + \vec{F}\_{amortecimento}
+$$
+
+$$
+m \cdot \vec{\ddot{x}} = -k \cdot \vec{x} - b \cdot \vec{\dot{x}}
 $$
 
 Simplificando:
 
 $$
-\ddot{x} + \frac{b}{m} \dot{x} + \frac{k}{m} x = 0
+\vec{\ddot{x}} + \frac{b}{m} \vec{\dot{x}} + \frac{k}{m} \vec{x} = 0
 $$
 
 Onde:
@@ -72,7 +76,7 @@ Definimos os seguintes parâmetros:
 A equação diferencial torna-se:
 
 $$
-\ddot{x} + 2\gamma \dot{x} + \omega_0^2 x = 0
+\vec{\ddot{x}} + 2\gamma \vec{\dot{x}} + \omega_0^2 \vec{x} = 0
 $$
 
 #### Tipos de Amortecimento
@@ -97,19 +101,20 @@ Onde:
 A solução geral é:
 
 $$
-x(t) = e^{-\gamma t} \left( C_1 \cos(\omega_d t) + C_2 \sin(\omega_d t) \right)
+x(t) = e^{-\gamma t} \left( C_1 \cos(\omega_d t) + C_2 \sin(\omega_d t) \right) \hat{j}
 $$
 
 Ou, de forma simplificada:
 
 $$
-x(t) = A e^{-\gamma t} \cos(\omega_d t + \phi)
+x(t) = A e^{-\gamma t} \cos(\omega_d t + \phi) \hat{j}
 $$
 
 - $A$: amplitude inicial,
 - $\phi$: fase inicial,
 - $\gamma = \frac{b}{2m}$: taxa de amortecimento,
 - $\omega_d$: frequência angular do movimento amortecido.
+- $\hat{j}$: versor do sistema
 
 ---
 
