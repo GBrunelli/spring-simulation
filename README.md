@@ -26,7 +26,7 @@ O uso do **Método de Verlet de Velocidade** proporciona maior precisão e estab
 A cada passo de tempo:
    - Calculamos a força da mola e a força de amortecimento.
    - Somamos as forças para obter a força resultante.
-   - Atualizamos a aceleração, velocidade e posição usando o método de Euler explícito.
+   - Atualizamos a aceleração, velocidade e posição.
 
 ---
 
@@ -41,16 +41,16 @@ O sistema representado neste projeto segue os princípios do **movimento oscilat
 
 #### Modelo Matemático
 
-A dinâmica do sistema é descrita pela **segunda lei de Newton** aplicada a sistemas dinâmicos:
+A dinâmica do sistema é descrita pela **segunda lei de Newton** aplicada a sistemas dinâmicos: 
 
 $$
-m \cdot \ddot{x} = -k \cdot x - b \cdot \dot{x}
+m \cdot \vec{\ddot{x}} = -k \cdot \vec{x} - b \cdot \vec{\dot{x}}
 $$
 
 Simplificando:
 
 $$
-\ddot{x} + \frac{b}{m} \dot{x} + \frac{k}{m} x = 0
+\vec{\ddot{x}} + \frac{b}{m} \vec{\dot{x}} + \frac{k}{m} \vec{x} = 0
 $$
 
 Onde:
@@ -72,7 +72,7 @@ Definimos os seguintes parâmetros:
 A equação diferencial torna-se:
 
 $$
-\ddot{x} + 2\gamma \dot{x} + \omega_0^2 x = 0
+\vec{\ddot{x}} + 2\gamma \vec{\dot{x}} + \omega_0^2 \vec{x} = 0
 $$
 
 #### Tipos de Amortecimento
@@ -97,19 +97,20 @@ Onde:
 A solução geral é:
 
 $$
-x(t) = e^{-\gamma t} \left( C_1 \cos(\omega_d t) + C_2 \sin(\omega_d t) \right)
+x(t) = e^{-\gamma t} \left( C_1 \cos(\omega_d t) + C_2 \sin(\omega_d t) \right) \hat{j}
 $$
 
 Ou, de forma simplificada:
 
 $$
-x(t) = A e^{-\gamma t} \cos(\omega_d t + \phi)
+x(t) = A e^{-\gamma t} \cos(\omega_d t + \phi) \hat{j}
 $$
 
 - $A$: amplitude inicial,
 - $\phi$: fase inicial,
 - $\gamma = \frac{b}{2m}$: taxa de amortecimento,
 - $\omega_d$: frequência angular do movimento amortecido.
+- $\hat{j}$: versor do sistema
 
 ---
 
