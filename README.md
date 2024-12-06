@@ -44,6 +44,10 @@ O sistema representado neste projeto segue os princípios do **movimento oscilat
 A dinâmica do sistema é descrita pela **segunda lei de Newton** aplicada a sistemas dinâmicos: 
 
 $$
+\vec{F}\_{resultante} = \sum{m \cdot \vec{\ddot{x}}}
+$$
+
+$$
 \vec{F}\_{resultante} = \vec{F}\_{mola} + \vec{F}\_{amortecimento}
 $$
 
