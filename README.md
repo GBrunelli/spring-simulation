@@ -105,13 +105,13 @@ Onde:
 A solução geral é:
 
 $$
-x(t) = e^{-\gamma t} \left( C_1 \cos(\omega_d t) + C_2 \sin(\omega_d t) \right) \hat{j}
+\hat{j} x(t) = e^{-\gamma t} \left( C_1 \cos(\omega_d t) + C_2 \sin(\omega_d t) \right) \hat{j}
 $$
 
 Ou, de forma simplificada:
 
 $$
-x(t) = A e^{-\gamma t} \cos(\omega_d t + \phi) \hat{j}
+\hat{j} x(t) = A e^{-\gamma t} \cos(\omega_d t + \phi) \hat{j}
 $$
 
 - $A$: amplitude inicial,
